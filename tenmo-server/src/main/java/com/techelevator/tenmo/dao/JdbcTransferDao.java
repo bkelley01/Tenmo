@@ -11,8 +11,8 @@ public class JdbcTransferDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Transfer intiateNewTransfer(Transfer transfer) {
-        final String sql ="";
-    }
+//    public Transfer intiateNewTransfer(Transfer transfer) {
+//        final String sql ="";
+//    }
 
 }
