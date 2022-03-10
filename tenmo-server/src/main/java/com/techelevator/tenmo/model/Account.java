@@ -45,9 +45,9 @@ public class Account {
     @Override
     public String toString() {
         return "Account {" +
-                " account id = " + account_id +
-                ", user id = " + user_id +
-                ", balance = " + balance +
+                " Account ID = " + account_id +
+                ", User ID = " + user_id +
+                ", Balance = " + balance +
                 " }";
     }
 }
