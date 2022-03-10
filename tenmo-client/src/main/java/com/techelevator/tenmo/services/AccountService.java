@@ -13,29 +13,29 @@ import java.math.BigDecimal;
 
 public class AccountService {
 
-    AuthenticatedUser authenticatedUser = new AuthenticatedUser();
-    private static final String API_BASE_URL = "https://localhost:8080/";
+    AuthenticatedUser currentUser = new AuthenticatedUser();
+    private String API_BASE_URL ;
     private final RestTemplate restTemplate = new RestTemplate();
 
+    public AccountService(String API_BASE_URL,AuthenticatedUser authenticatedUser) {
+        this.API_BASE_URL=API_BASE_URL;
+        this.currentUser = authenticatedUser;
+    }
 
-    public BigDecimal getBalance(String username) {
+    public BigDecimal getBalance() {
         BigDecimal balance = null;
         try {
-            ResponseEntity<BigDecimal> response = restTemplate.exchange(API_BASE_URL + "balance/" + username,
+            ResponseEntity<BigDecimal> response = restTemplate.exchange(API_BASE_URL + "balance/" + currentUser.getUser().getUsername(),
                     HttpMethod.GET, makeAuthEntity(), BigDecimal.class);
             balance = response.getBody();
-            System.out.println(balance);
+            System.out.println( "The current balance is: $" + balance );
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
         }
         return balance;
     }
 
-    private String authToken = null;
 
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
-    }
 
 //    private HttpEntity<Account> makeAccountEntity(Account account) {
 //        HttpHeaders headers = new HttpHeaders();
@@ -46,7 +46,7 @@ public class AccountService {
 
     private HttpEntity<Void> makeAuthEntity() {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(authToken);
+        headers.setBearerAuth(currentUser.getToken());
         return new HttpEntity<>(headers);
     }
 
