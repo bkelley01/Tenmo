@@ -10,4 +10,9 @@ public interface AccountDao {
 
     BigDecimal getAccountBalanceByUsername(String username);
 
+    Account receiveFunds(BigDecimal amount, Long accountId);
+
+    Account sendFunds(BigDecimal amount, Long accountId);
+
+
 }

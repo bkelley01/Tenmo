@@ -50,6 +50,31 @@ public class JdbcAccountDao implements AccountDao {
 
     }
 
+    public Account sendFunds(BigDecimal amount, Long accountId) {
+        Account account = null;
+        String sql = "UPDATE account " +
+                " SET balance = (balance - ?) " +
+                " WHERE account_id = ? " +
+                " RETURNING account;";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, amount, accountId);
+        if(result.next()) {
+           account = mapRowToAccount(result);
+        }
+        return account;
+    }
+
+    public Account receiveFunds(BigDecimal amount, Long accountId) {
+        Account account = null;
+        String sql = "UPDATE account " +
+                " SET balance = (balance + ?) " +
+                " WHERE account_id = ? " +
+                " RETURNING account;";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, amount, accountId);
+        if(result.next()) {
+            account = mapRowToAccount(result);
+        }
+        return account;
+    }
 
     private Account mapRowToAccount(SqlRowSet rs) {
         Account account = new Account();
