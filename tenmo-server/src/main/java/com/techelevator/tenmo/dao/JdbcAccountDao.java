@@ -7,6 +7,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import javax.sql.RowSet;
 import java.math.BigDecimal;
 
 @Component
@@ -34,17 +35,17 @@ public class JdbcAccountDao implements AccountDao {
     }
 
     @Override
-    public Account getAccountBalanceByUsername(String username) {
-        Account account = null;
+    public BigDecimal getAccountBalanceByUsername(String username) {
+        BigDecimal balance = null;
         String sql = "SELECT balance " +
                 "FROM account " +
                 "JOIN tenmo_user ON tenmo_user.user_id = account.user_id " +
                 "WHERE username = ?";
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, username);
-        if (rowSet.next()) {
-            account = mapRowToAccount(rowSet);
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, username);
+        if (result.next()) {
+            balance = result.getBigDecimal("balance");
         }
-        return account;
+        return balance;
         // throw new UsernameNotFoundException("User " + username + " was not found.");
 
     }
@@ -57,5 +58,12 @@ public class JdbcAccountDao implements AccountDao {
         account.setUser_id(rs.getLong("user_id"));
         return account;
     }
+
+//    private BigDecimal mapRowToBalance(SqlRowSet rs) {
+//        BigDecimal balance;
+//        Account account = new Account();
+//        account.setBalance(rs.getBigDecimal("balance"));
+//        return account;
+//    }
 
 }

@@ -8,6 +8,6 @@ public interface AccountDao {
 
     Account findAccountByUsername(String username);
 
-    Account getAccountBalanceByUsername(String username);
+    BigDecimal getAccountBalanceByUsername(String username);
 
 }
