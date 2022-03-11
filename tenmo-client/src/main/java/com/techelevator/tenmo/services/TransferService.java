@@ -47,7 +47,7 @@ public class TransferService {
 
                 for (Transfer transfer : allTransfers) {
 
-                    System.out.println(transfer.getTransfer_id() + "        "   + transfer.getAccount_from() + "/" + transfer.getAccount_to() + "               $" + transfer.getAmount());
+                    System.out.println(transfer.getTransfer_id() + "        " + transfer.getAccount_from() + "/" + transfer.getAccount_to() + "               $" + transfer.getAmount());
                     System.out.println();
                 }
             }
@@ -63,7 +63,16 @@ public class TransferService {
         try {
             ResponseEntity<Transfer> response = restTemplate.exchange((API_BASE_URL + "transfers/" + id),
                     HttpMethod.GET, makeAuthEntity(), Transfer.class);
-            transfer = response.getBody();;
+            transfer = response.getBody();
+            System.out.println("--------------------------------------------\n" +
+                    "Transfer Details\n" +
+                    "--------------------------------------------\n" +
+                    "Id: " + transfer.getTransfer_id() + "\n" +
+                    "From: " + transfer.getAccount_from() + "\n" +
+                    "To: " + transfer.getAccount_to() + "\n" +
+                    "Type: " + transfer.getTransfer_type_id() + "\n" +
+                    "Status: " + transfer.getTransfer_status_id() + "\n" +
+                    "Amount: $" + transfer.getAmount());
         } catch (RestClientResponseException | ResourceAccessException e) {
             System.out.println(e.getMessage());
         }

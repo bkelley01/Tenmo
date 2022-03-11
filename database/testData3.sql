@@ -1,0 +1,46 @@
+INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount)
+VALUES (1, 1, 2003, 2001, 500.00)
+RETURNING transfer_id;
+
+select *
+FROM transfer
+JOIN account ON account.account_id = transfer.account_from
+JOIN tenmo_user ON tenmo_user.user_id = account.user_id
+WHERE username = 'abdou'
+
+select *
+from transfer;
+
+
+select *
+from tenmo_user;
+
+select balance, username
+from account
+JOIN tenmo_user ON tenmo_user.user_id = account.user_id
+WHERE username = 'virginia';
+
+select account_id, user_id, balance
+from account
+WHERE user_id = 1002
+JOIN tenmo_user ON tenmo_user.user_id = account.user_id;
+
+select *
+from transfer_type;
+
+select *
+from transfer_status;
+
+UPDATE account
+SET balance = (balance - 500)
+WHERE account_id = 2001
+RETURNING account;
+
+UPDATE account
+SET balance = (balance + 500)
+WHERE account_id = 2001;
+
+
+
+
+

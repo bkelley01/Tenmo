@@ -15,9 +15,11 @@ import java.util.List;
 public class JdbcTransferDao implements TransferDao {
 
     private JdbcTemplate jdbcTemplate;
+    private AccountDao accountDao;
 
-    public JdbcTransferDao(JdbcTemplate jdbcTemplate) {
+    public JdbcTransferDao(JdbcTemplate jdbcTemplate, AccountDao accountDao) {
         this.jdbcTemplate = jdbcTemplate;
+        this.accountDao = accountDao;
     }
 
 
@@ -58,10 +60,19 @@ public class JdbcTransferDao implements TransferDao {
         return transfers;
     }
 
-//    public Transfer sendFunds(BigDecimal amount) {
-//        Account account = new Account();
-//        User currentUser = new User();
-//    }
+    public Transfer transferFunds(BigDecimal amount, Long user_id) {
+        Transfer newTransfer = null;
+
+
+        Long losingAccountNum = newTransfer.getAccount_from();
+        Account losingAccount = accountDao.findAccountByUserID(losingAccountNum);
+        Long receivingAccount = newTransfer.getAccount_to();
+        if (losingAccount.getBalance().compareTo(amount) >= 0) {
+            losingAccount = accountDao.sendFunds(amount, user_id);
+        }
+
+        return createTransfer(newTransfer);
+    }
 
     private Transfer mapRowToTransfer(SqlRowSet rs) {
         Transfer transfer = new Transfer();
