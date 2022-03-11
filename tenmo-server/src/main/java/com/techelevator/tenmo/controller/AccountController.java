@@ -23,16 +23,19 @@ public class AccountController {
 
 
     @RequestMapping(path = "balance/{username}", method = RequestMethod.GET)
-    public BigDecimal balance (@PathVariable String username) {
+    public BigDecimal balance(@PathVariable String username) {
         return accountDao.getAccountBalanceByUsername(username);
     }
 
 
-    @RequestMapping(path = "transfers/{id}", method =RequestMethod.GET)
-    public List<Transfer> getAllTransfersById(@PathVariable Long id){
+    @RequestMapping(path = "transfers/user/{id}", method = RequestMethod.GET)
+    public List<Transfer> getAllTransfersById(@PathVariable Long id) {
 
         return this.transferDao.getAllTransfersByUserId(id);
     }
 
-
+    @RequestMapping(path = "transfer/{id}", method = RequestMethod.GET)
+    public Transfer getTransfer(@PathVariable Long id) {
+        return this.transferDao.getTransfer(id);
+    }
 }

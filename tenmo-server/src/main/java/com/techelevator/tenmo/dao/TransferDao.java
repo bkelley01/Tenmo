@@ -10,5 +10,7 @@ public interface TransferDao {
 
     List<Transfer> getAllTransfersByUserId(Long user_id);
 
+    public Transfer createTransfer(Transfer transfer);
+
 
 }

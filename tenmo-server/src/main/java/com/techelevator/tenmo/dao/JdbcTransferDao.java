@@ -21,6 +21,7 @@ public class JdbcTransferDao implements TransferDao {
     }
 
 
+    @Override
     public Transfer getTransfer(Long transfer_id) {
         Transfer transfer = null;
         String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount\n" +
@@ -33,6 +34,7 @@ public class JdbcTransferDao implements TransferDao {
         return transfer;
     }
 
+    @Override
     public Transfer createTransfer(Transfer transfer) {
         String sql = "INSERT INTO transfer (transfer_type_id, transfer_status_id, account_from, account_to, amount)\n" +
                 " VALUES (?, ?, ?, ?, ?)\n" +

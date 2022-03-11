@@ -46,17 +46,28 @@ public class TransferService {
 
 
                 for (Transfer transfer : allTransfers) {
-                    Long accountFrom = transfer.getAccount_from();
-                    User user = user.get
-                    acount = transfer.ge
-                            System.out.println(transfer.getTransfer_id() + "      "  + transfer + "          " +transfer.getAccount_to() + "        " + transfer.getAmount() );
+
+                    System.out.println(transfer.getTransfer_id() + "      " + transfer + "          " + transfer.getAccount_to() + "        " + transfer.getAmount());
+                    System.out.println();
                 }
             }
 
         } catch (RestClientResponseException | ResourceAccessException e) {
             System.out.println(e.getMessage());
         }
-return allTransfers;
+        return allTransfers;
+    }
+
+    public Transfer getTransferById(Long id) {
+        Transfer transfer = null;
+        try {
+            ResponseEntity<Transfer> response = restTemplate.exchange((API_BASE_URL + "transfers/" + id),
+                    HttpMethod.GET, makeAuthEntity(), Transfer.class);
+            transfer = response.getBody();;
+        } catch (RestClientResponseException | ResourceAccessException e) {
+            System.out.println(e.getMessage());
+        }
+        return transfer;
     }
 
 

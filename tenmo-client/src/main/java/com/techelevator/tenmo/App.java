@@ -9,6 +9,7 @@ import com.techelevator.tenmo.services.ConsoleService;
 import com.techelevator.tenmo.services.TransferService;
 
 import java.math.BigDecimal;
+import java.util.Scanner;
 
 public class App {
 
@@ -92,12 +93,13 @@ public class App {
 
     private void viewCurrentBalance() {
 
-        AccountService accountService = new AccountService(API_BASE_URL,currentUser);
+        AccountService accountService = new AccountService(API_BASE_URL, currentUser);
 
 
-        try{
+        try {
             accountService.getBalance();
-        }catch (NullPointerException e){
+
+        } catch (NullPointerException e) {
             System.out.println(e.getMessage());
         }
 
@@ -105,11 +107,13 @@ public class App {
 
     private void viewTransferHistory() {
         // TODO Auto-generated method stub
-        TransferService transferService = new TransferService(API_BASE_URL,currentUser);
+        TransferService transferService = new TransferService(API_BASE_URL, currentUser);
 
-        try{
+        try {
             transferService.getAllTransfersById();
-        }catch(NumberFormatException e){
+            Long id = Long.valueOf(consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): "));
+            transferService.getTransferById(id);
+        } catch (NumberFormatException e) {
             System.out.println("Invalid Input");
         }
 
