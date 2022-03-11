@@ -33,7 +33,7 @@ public class TransferService {
         Account account = new Account();
 
         try {
-            ResponseEntity<Transfer[]> response = restTemplate.exchange(API_BASE_URL + "transfers/" + currentUser.getUser().getId(),
+            ResponseEntity<Transfer[]> response = restTemplate.exchange(API_BASE_URL + "transfers/user/" + currentUser.getUser().getId(),
                     HttpMethod.GET, makeAuthEntity(), Transfer[].class);
 
             allTransfers = response.getBody();
@@ -47,7 +47,7 @@ public class TransferService {
 
                 for (Transfer transfer : allTransfers) {
 
-                    System.out.println(transfer.getTransfer_id() + "      " + transfer + "          " + transfer.getAccount_to() + "        " + transfer.getAmount());
+                    System.out.println(transfer.getTransfer_id() + "        "   + transfer.getAccount_from() + "/" + transfer.getAccount_to() + "               $" + transfer.getAmount());
                     System.out.println();
                 }
             }
