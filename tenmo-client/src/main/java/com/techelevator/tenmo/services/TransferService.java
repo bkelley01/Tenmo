@@ -74,24 +74,24 @@ public class TransferService {
         return transfer;
     }
 
-//    public TransferDTO addTransfer(Transfer newTransfer) {
-//        Transfer createdTransfer = null;
-//        try {
-//            ResponseEntity<Transfer> response = this.restTemplate.exchange(
-//                    API_BASE_URL + "/transfers/",
-//                    HttpMethod.POST, this.makeTransferEntity(newTransfer),
-//                    Transfer.class);
-//            createdTransfer = response.getBody();
-//
-//        } catch (ResourceAccessException | RestClientResponseException e) {
-//            BasicLogger.log(e.getMessage());
-//        }
-//
-//        return createdTransfer;
-//    }
+    public TransferDTO addTransfer(TransferDTO newTransfer) {
+        TransferDTO createdTransfer = null;
+        try {
+            ResponseEntity<TransferDTO> response = this.restTemplate.exchange(
+                    API_BASE_URL + "/transfers/",
+                    HttpMethod.POST, this.makeTransferEntity(newTransfer),
+                    TransferDTO.class);
+            createdTransfer = response.getBody();
+
+        } catch (ResourceAccessException | RestClientResponseException e) {
+            BasicLogger.log(e.getMessage());
+        }
+
+        return createdTransfer;
+    }
 
 
-    private HttpEntity<Transfer> makeTransferEntity(Transfer transfer) {
+    private HttpEntity<TransferDTO> makeTransferEntity(TransferDTO transfer) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(currentUser.getToken());

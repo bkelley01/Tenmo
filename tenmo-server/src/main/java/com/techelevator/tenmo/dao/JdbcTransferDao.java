@@ -60,19 +60,6 @@ public class JdbcTransferDao implements TransferDao {
         return transfers;
     }
 
-    public Transfer transferFunds(BigDecimal amount, Long user_id) {
-        Transfer newTransfer = null;
-
-
-        Long losingAccountNum = newTransfer.getAccount_from();
-        Account losingAccount = accountDao.findAccountByUserID(losingAccountNum);
-        Long receivingAccount = newTransfer.getAccount_to();
-        if (losingAccount.getBalance().compareTo(amount) >= 0) {
-            losingAccount = accountDao.sendFunds(amount, user_id);
-        }
-
-        return createTransfer(newTransfer);
-    }
 
     private Transfer mapRowToTransfer(SqlRowSet rs) {
         Transfer transfer = new Transfer();
