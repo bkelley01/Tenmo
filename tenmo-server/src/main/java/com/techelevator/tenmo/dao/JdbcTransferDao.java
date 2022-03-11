@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JdbcTransferDao implements TransferDao {
 
@@ -36,6 +38,20 @@ public class JdbcTransferDao implements TransferDao {
         Long transferIdAssigned = jdbcTemplate.queryForObject(sql, Long.class, transfer.getTransfer_type_id(),
                 transfer.getTransfer_status_id(), transfer.getAccount_from(), transfer.getAccount_to(), transfer.getAmount());
         return getTransfer(transferIdAssigned);
+    }
+
+    @Override
+    public List<Transfer> getAllTransfersByUserId(Long user_id) {
+        List<Transfer> transfers = new ArrayList<>();
+        String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount\n" +
+                " FROM transfer\n" +
+                " JOIN account ON (account.account_id = transfer.account_from) OR (account.account_id = transfer.account_to)\n" +
+                " WHERE user_id = ?";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, user_id);
+        while(result.next()) {
+            transfers.add(mapRowToTransfer(result));
+        }
+        return transfers;
     }
 
 //    public Transfer sendFunds(BigDecimal amount) {
