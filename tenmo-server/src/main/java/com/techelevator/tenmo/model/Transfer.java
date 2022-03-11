@@ -17,16 +17,16 @@ public class Transfer {
     private Long account_to;
     private BigDecimal amount;
 
-    public Transfer() {
-    }
 
-    public Transfer(Long transfer_id, Long transfer_type_id, Long transfer_status_id, Long account_from, Long account_to, BigDecimal amount) {
-        this.transfer_id = transfer_id;
+    public Transfer(Long transfer_type_id, Long transfer_status_id, Long account_from, Long account_to, BigDecimal amount) {
         this.transfer_type_id = transfer_type_id;
         this.transfer_status_id = transfer_status_id;
         this.account_from = account_from;
         this.account_to = account_to;
         this.amount = amount;
+    }
+
+    public Transfer() {
     }
 
     public Long getTransfer_id() {

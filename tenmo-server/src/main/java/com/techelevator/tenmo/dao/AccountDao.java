@@ -14,5 +14,7 @@ public interface AccountDao {
 
     Account sendFunds(BigDecimal amount, Long accountId);
 
+    Long findUserID(Long account_id);
+
 
 }

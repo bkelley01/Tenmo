@@ -1,18 +1,17 @@
 package com.techelevator.tenmo.model;
 
-import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
 public class TransferDTO {
-    @NotBlank
+
     private Long transfer_id;
-    @NotBlank
+
     private Long transfer_type_id;
-    @NotBlank
+
     private Long transfer_status_id;
-    @NotBlank
+
     private Long current_user_id;
-    @NotBlank
+
     private Long recipient_user_id;
 
     private BigDecimal amount;

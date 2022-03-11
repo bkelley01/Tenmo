@@ -28,10 +28,24 @@ public class JdbcAccountDao implements AccountDao {
                 "WHERE username = ?";
         SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, username);
         if (rowSet.next()) {
-             account = mapRowToAccount(rowSet);
+            account = mapRowToAccount(rowSet);
         }
         return account;
-       // throw new UsernameNotFoundException("User " + username + " was not found.");
+        // throw new UsernameNotFoundException("User " + username + " was not found.");
+    }
+
+    @Override
+    public Long findUserID(Long account_id) {
+        Long user_id = 0L;
+        String sql = " SELECT user_id\n" +
+                " FROM account\n" +
+                " WHERE account_id = ?";
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, account_id);
+        if (rowSet.next()) {
+            user_id = rowSet.getLong("user_id");
+        }
+        return user_id;
+        // throw new UsernameNotFoundException("User " + username + " was not found.");
     }
 
     @Override
@@ -50,6 +64,7 @@ public class JdbcAccountDao implements AccountDao {
 
     }
 
+    @Override
     public Account sendFunds(BigDecimal amount, Long accountId) {
         Account account = null;
         String sql = "UPDATE account " +
@@ -57,12 +72,14 @@ public class JdbcAccountDao implements AccountDao {
                 " WHERE account_id = ? " +
                 " RETURNING account;";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql, amount, accountId);
-        if(result.next()) {
-           account = mapRowToAccount(result);
+        if (result.next()) {
+            account = mapRowToAccount(result);
         }
         return account;
     }
 
+
+    @Override
     public Account receiveFunds(BigDecimal amount, Long accountId) {
         Account account = null;
         String sql = "UPDATE account " +
@@ -70,7 +87,7 @@ public class JdbcAccountDao implements AccountDao {
                 " WHERE account_id = ? " +
                 " RETURNING account;";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql, amount, accountId);
-        if(result.next()) {
+        if (result.next()) {
             account = mapRowToAccount(result);
         }
         return account;
@@ -83,12 +100,5 @@ public class JdbcAccountDao implements AccountDao {
         account.setUser_id(rs.getLong("user_id"));
         return account;
     }
-
-//    private BigDecimal mapRowToBalance(SqlRowSet rs) {
-//        BigDecimal balance;
-//        Account account = new Account();
-//        account.setBalance(rs.getBigDecimal("balance"));
-//        return account;
-//    }
 
 }
