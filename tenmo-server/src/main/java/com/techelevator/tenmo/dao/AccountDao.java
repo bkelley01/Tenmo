@@ -10,7 +10,7 @@ public interface AccountDao {
 
     BigDecimal getAccountBalanceByUsername(String username);
 
-    Account receiveFunds(BigDecimal amount, Long accountId);
+    BigDecimal receiveFunds(BigDecimal amount, Long accountId);
 
     BigDecimal sendFunds(BigDecimal amount, Long accountId);
 

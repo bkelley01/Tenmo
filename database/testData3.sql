@@ -38,6 +38,11 @@ RETURNING account;
 
 UPDATE account
 SET balance = (balance - 500)
+WHERE user_id = 1002
+RETURNING balance;
+
+UPDATE account
+SET balance = (balance - 500)
 WHERE account_id = 2001;
 
 

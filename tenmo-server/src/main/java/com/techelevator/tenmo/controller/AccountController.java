@@ -35,19 +35,19 @@ public class AccountController {
     }
 
     @RequestMapping(path = "/transfers/", method = RequestMethod.POST)
-    public Transfer sendTransfer(@RequestBody TransferDTO transfer, Principal currentUser) {
-        Long currentUserAccountId = accountDao.findAccountByUsername(currentUser.getName()).getAccount_id();
-        Long currentUserID = accountDao.findUserID(currentUserAccountId);
-        String recipientUsername = transfer.getRecipient_username();
-        Long recipientAccountId = accountDao.findAccountIDByUsername(recipientUsername);
-        Long recipientUserid = transfer.getRecipient_user_id();
-        Transfer newTransfer = new Transfer(2L, 1L, currentUserAccountId, recipientAccountId, transfer.getAmount());
-        accountDao.sendFunds(transfer.getAmount(),currentUserID);
-        accountDao.receiveFunds(transfer.getAmount(), recipientUserid);
-        transferDao.createTransfer(newTransfer);
-        return newTransfer;
+    public Transfer sendTransfer(@RequestBody Transfer newTransfer, Principal currentUser) {
+        //TransferDTO transfer = new TransferDTO();
+        //Long currentUserAccountId = accountDao.findAccountByUsername(currentUser.getName()).getAccount_id();
+        //Long currentUserID = accountDao.findUserID(currentUserAccountId);
+        //String recipientUsername = transfer.getRecipient_username();
+        //Long recipientAccountId = accountDao.findAccountIDByUsername(recipientUsername);
+        //Long recipientUserid = transfer.getRecipient_user_id();
+        Transfer thisTransfer = new Transfer(2L, 1L, newTransfer.getAccount_from(), newTransfer.getAccount_to(),
+                newTransfer.getAmount());
+        //accountDao.sendFunds(transfer.getAmount(),currentUserAccountId);
+        //accountDao.receiveFunds(transfer.getAmount(), recipientAccountId);
+        return transferDao.createTransfer(thisTransfer);
     }
-
 
     @RequestMapping(path = "/transfers/user/{id}", method = RequestMethod.GET)
     public List<Transfer> getAllTransfersById(@PathVariable Long id) {

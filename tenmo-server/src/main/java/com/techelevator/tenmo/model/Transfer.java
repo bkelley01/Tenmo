@@ -15,6 +15,7 @@ public class Transfer {
     private Long account_from;
     @NotBlank
     private Long account_to;
+
     private BigDecimal amount;
 
 

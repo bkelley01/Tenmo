@@ -17,22 +17,6 @@ public class TransferDTO {
     @NotBlank
     private String recipient_username;
 
-    public Long getCurrent_user_id() {
-        return current_user_id;
-    }
-
-    public void setCurrent_user_id(Long current_user_id) {
-        this.current_user_id = current_user_id;
-    }
-
-    public String getRecipient_username() {
-        return recipient_username;
-    }
-
-    public void setRecipient_username(String recipient_username) {
-        this.recipient_username = recipient_username;
-    }
-
     private BigDecimal amount;
 
     public Long getTransfer_id() {
@@ -59,12 +43,12 @@ public class TransferDTO {
         this.transfer_status_id = transfer_status_id;
     }
 
-    public Long getSource_user_id() {
+    public Long getCurrent_user_id() {
         return current_user_id;
     }
 
-    public void setSource_user_id(Long source_user_id) {
-        this.current_user_id = source_user_id;
+    public void setCurrent_user_id(Long current_user_id) {
+        this.current_user_id = current_user_id;
     }
 
     public Long getRecipient_user_id() {
@@ -73,6 +57,14 @@ public class TransferDTO {
 
     public void setRecipient_user_id(Long recipient_user_id) {
         this.recipient_user_id = recipient_user_id;
+    }
+
+    public String getRecipient_username() {
+        return recipient_username;
+    }
+
+    public void setRecipient_username(String recipient_username) {
+        this.recipient_username = recipient_username;
     }
 
     public BigDecimal getAmount() {

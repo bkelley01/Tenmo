@@ -47,8 +47,8 @@ public class JdbcAccountDao implements AccountDao {
     @Override
     public Long findUserID(Long account_id) {
         Long user_id = 0L;
-        String sql = " SELECT user_id\n" +
-                " FROM account\n" +
+        String sql = " SELECT user_id" +
+                " FROM account" +
                 " WHERE account_id = ?";
         SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, account_id);
         if (rowSet.next()) {
@@ -74,13 +74,12 @@ public class JdbcAccountDao implements AccountDao {
     }
 
     @Override
-    public BigDecimal sendFunds(BigDecimal amount, Long user_id) {
+    public BigDecimal sendFunds(BigDecimal amount, Long account_id) {
         BigDecimal balance = null;
         String sql = "UPDATE account" +
-                " SET balance = (balance - ?)" +
-                " WHERE user_id = ? " +
-                " RETURNING balance;";
-        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, amount, user_id);
+                " SET balance = balance - ?" +
+                " WHERE account_id = ?; ";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, amount, account_id);
         if (result.next()) {
             balance = result.getBigDecimal("balance");
         }
@@ -89,17 +88,16 @@ public class JdbcAccountDao implements AccountDao {
 
 
     @Override
-    public Account receiveFunds(BigDecimal amount, Long user_id) {
-        Account account = null;
+    public BigDecimal receiveFunds(BigDecimal amount, Long account_id) {
+        BigDecimal balance = null;
         String sql = "UPDATE account" +
-                " SET balance = (balance + ?)" +
-                " WHERE user_id = ?" +
-                " RETURNING account;";
-        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, amount, user_id);
+                " SET balance = balance + ?" +
+                " WHERE account_id = ?;";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, amount, account_id);
         if (result.next()) {
-            account = mapRowToAccount(result);
+            balance = result.getBigDecimal("balance");
         }
-        return account;
+        return balance;
     }
 
     private Account mapRowToAccount(SqlRowSet rs) {
