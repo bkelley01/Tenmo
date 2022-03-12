@@ -35,18 +35,13 @@ public class AccountController {
     }
 
     @RequestMapping(path = "/transfers/", method = RequestMethod.POST)
-    public Transfer sendTransfer(@RequestBody Transfer newTransfer, Principal currentUser) {
-        //TransferDTO transfer = new TransferDTO();
-        //Long currentUserAccountId = accountDao.findAccountByUsername(currentUser.getName()).getAccount_id();
-        //Long currentUserID = accountDao.findUserID(currentUserAccountId);
-        //String recipientUsername = transfer.getRecipient_username();
-        //Long recipientAccountId = accountDao.findAccountIDByUsername(recipientUsername);
-        //Long recipientUserid = transfer.getRecipient_user_id();
-        Transfer thisTransfer = new Transfer(2L, 1L, newTransfer.getAccount_from(), newTransfer.getAccount_to(),
-                newTransfer.getAmount());
-        //accountDao.sendFunds(transfer.getAmount(),currentUserAccountId);
-        //accountDao.receiveFunds(transfer.getAmount(), recipientAccountId);
-        return transferDao.createTransfer(thisTransfer);
+    public void sendTransfer(@RequestBody TransferDTO transferDTO, Principal currentUser) {
+        Long currentUserAccountId = accountDao.findAccountByUsername(currentUser.getName()).getAccount_id();
+        Transfer thisTransfer = new Transfer(2L, 2L, currentUserAccountId, accountDao.getAccountIdByUserId(transferDTO.getRecipient_user_id()),
+                transferDTO.getAmount());
+        accountDao.sendFunds(transferDTO.getAmount(), currentUserAccountId);
+        accountDao.receiveFunds(transferDTO.getAmount(), thisTransfer.getAccount_to());
+        transferDao.createTransfer(thisTransfer);
     }
 
     @RequestMapping(path = "/transfers/user/{id}", method = RequestMethod.GET)

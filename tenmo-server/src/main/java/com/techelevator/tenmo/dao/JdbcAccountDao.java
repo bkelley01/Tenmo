@@ -19,7 +19,7 @@ public class JdbcAccountDao implements AccountDao {
     @Override
     public Account findAccountByUsername(String username) {
         Account account = null;
-        String sql = "SELECT account_id " +
+        String sql = "SELECT account_id, balance, account.user_id " +
                 "FROM account " +
                 "JOIN tenmo_user ON tenmo_user.user_id = account.user_id " +
                 "WHERE username = ?";
@@ -43,6 +43,7 @@ public class JdbcAccountDao implements AccountDao {
         }
         return accountId;
     }
+
 
     @Override
     public Long findUserID(Long account_id) {
@@ -73,16 +74,20 @@ public class JdbcAccountDao implements AccountDao {
 
     }
 
+    public Long getAccountIdByUserId (Long userId) {
+        String sql = "SELECT account_id FROM account WHERE user_id = ?;";
+        return jdbcTemplate.queryForObject(sql, Long.class, userId);
+    }
+
     @Override
     public BigDecimal sendFunds(BigDecimal amount, Long account_id) {
         BigDecimal balance = null;
         String sql = "UPDATE account" +
                 " SET balance = balance - ?" +
                 " WHERE account_id = ?; ";
-        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, amount, account_id);
-        if (result.next()) {
-            balance = result.getBigDecimal("balance");
-        }
+        String sql2 = "SELECT balance FROM account WHERE account_id = ?";
+        jdbcTemplate.update(sql, amount, account_id);
+        balance = jdbcTemplate.queryForObject(sql2, BigDecimal.class, account_id);
         return balance;
     }
 
@@ -92,11 +97,10 @@ public class JdbcAccountDao implements AccountDao {
         BigDecimal balance = null;
         String sql = "UPDATE account" +
                 " SET balance = balance + ?" +
-                " WHERE account_id = ?;";
-        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, amount, account_id);
-        if (result.next()) {
-            balance = result.getBigDecimal("balance");
-        }
+                " WHERE account_id = ?; ";
+        String sql2 = "SELECT balance FROM account WHERE account_id = ?";
+        jdbcTemplate.update(sql, amount, account_id);
+        balance = jdbcTemplate.queryForObject(sql2, BigDecimal.class, account_id);
         return balance;
     }
 
