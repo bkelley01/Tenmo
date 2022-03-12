@@ -1,11 +1,8 @@
 package com.techelevator.tenmo.model;
 
-import org.springframework.stereotype.Component;
-
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
-@Component
 public class TransferDTO {
     @NotBlank
     private Long transfer_id;

@@ -12,11 +12,6 @@ select user_id
 FROM account
 WHERE account_id = 2002;
 
-
-
-select *
-from tr
-
 select *
 from tenmo_user;
 
@@ -37,14 +32,18 @@ select *
 from transfer_status;
 
 UPDATE account
-SET balance = (balance - 500)
-WHERE account_id = 2001
+SET balance = (balance + 500)
+WHERE user_id = 1002
 RETURNING account;
 
 UPDATE account
-SET balance = (balance + 500)
+SET balance = (balance - 500)
 WHERE account_id = 2001;
 
+
+SELECT username
+FROM tenmo_user
+WHERE user_id = ?
 
 
 

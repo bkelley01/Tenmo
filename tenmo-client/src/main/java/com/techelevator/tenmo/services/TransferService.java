@@ -72,13 +72,13 @@ public class TransferService {
         return transfer;
     }
 
-    public TransferDTO addTransfer(TransferDTO newTransfer) {
-        TransferDTO createdTransfer = null;
+    public Transfer addTransfer(Transfer newTransfer) {
+        Transfer createdTransfer = null;
         try {
-            ResponseEntity<TransferDTO> response = this.restTemplate.exchange(
+            ResponseEntity<Transfer> response = this.restTemplate.exchange(
                     API_BASE_URL + "/transfers/",
                     HttpMethod.POST, this.makeTransferEntity(newTransfer),
-                    TransferDTO.class);
+                    Transfer.class);
             createdTransfer = response.getBody();
 
         } catch (ResourceAccessException | RestClientResponseException e) {
@@ -89,7 +89,7 @@ public class TransferService {
     }
 
 
-    private HttpEntity<TransferDTO> makeTransferEntity(TransferDTO transfer) {
+    private HttpEntity<Transfer> makeTransferEntity(Transfer transfer) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(currentUser.getToken());

@@ -123,15 +123,17 @@ public class App {
         TransferService transferService = new TransferService(API_BASE_URL, currentUser);
         UserService userService = new UserService(API_BASE_URL, currentUser);
 
+        Transfer transfer = new Transfer();
         TransferDTO transferDTO = new TransferDTO();
 
         userService.getAllUsers();
         int userID = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel): ");
         BigDecimal amount = consoleService.promptForBigDecimal("Enter amount: ");
-        transferDTO.setAmount(amount);
+        transfer.setAmount(amount);
         transferDTO.setRecipient_user_id((long) userID);
         try {
-            transferService.addTransfer(transferDTO);
+            transferService.addTransfer(transfer);
+            System.out.println("Your transfer is complete.");
         } catch (NumberFormatException e) {
             BasicLogger.log(e.getMessage());
         }

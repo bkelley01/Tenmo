@@ -1,13 +1,10 @@
 package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Account;
-import com.techelevator.tenmo.model.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import javax.sql.RowSet;
 import java.math.BigDecimal;
 
 @Component
@@ -26,12 +23,25 @@ public class JdbcAccountDao implements AccountDao {
                 "FROM account " +
                 "JOIN tenmo_user ON tenmo_user.user_id = account.user_id " +
                 "WHERE username = ?";
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, username);
-        if (rowSet.next()) {
-            account = mapRowToAccount(rowSet);
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, username);
+        if (result.next()) {
+            account = mapRowToAccount(result);
         }
         return account;
-        // throw new UsernameNotFoundException("User " + username + " was not found.");
+    }
+
+    @Override
+    public Long findAccountIDByUsername(String username) {
+        Long accountId = null;
+        String sql = "SELECT account_id " +
+                "FROM account " +
+                "JOIN tenmo_user ON tenmo_user.user_id = account.user_id " +
+                "WHERE username = ?";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, username);
+        if (result.next()) {
+            accountId = result.getLong("account_id");
+        }
+        return accountId;
     }
 
     @Override
@@ -45,7 +55,6 @@ public class JdbcAccountDao implements AccountDao {
             user_id = rowSet.getLong("user_id");
         }
         return user_id;
-        // throw new UsernameNotFoundException("User " + username + " was not found.");
     }
 
 
@@ -61,33 +70,32 @@ public class JdbcAccountDao implements AccountDao {
             balance = result.getBigDecimal("balance");
         }
         return balance;
-        // throw new UsernameNotFoundException("User " + username + " was not found.");
 
     }
 
     @Override
-    public Account sendFunds(BigDecimal amount, Long accountId) {
-        Account account = null;
-        String sql = "UPDATE account " +
-                " SET balance = (balance - ?) " +
-                " WHERE account_id = ? " +
-                " RETURNING account;";
-        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, amount, accountId);
+    public BigDecimal sendFunds(BigDecimal amount, Long user_id) {
+        BigDecimal balance = null;
+        String sql = "UPDATE account" +
+                " SET balance = (balance - ?)" +
+                " WHERE user_id = ? " +
+                " RETURNING balance;";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, amount, user_id);
         if (result.next()) {
-            account = mapRowToAccount(result);
+            balance = result.getBigDecimal("balance");
         }
-        return account;
+        return balance;
     }
 
 
     @Override
-    public Account receiveFunds(BigDecimal amount, Long accountId) {
+    public Account receiveFunds(BigDecimal amount, Long user_id) {
         Account account = null;
-        String sql = "UPDATE account " +
-                " SET balance = (balance + ?) " +
-                " WHERE account_id = ? " +
+        String sql = "UPDATE account" +
+                " SET balance = (balance + ?)" +
+                " WHERE user_id = ?" +
                 " RETURNING account;";
-        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, amount, accountId);
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, amount, user_id);
         if (result.next()) {
             account = mapRowToAccount(result);
         }

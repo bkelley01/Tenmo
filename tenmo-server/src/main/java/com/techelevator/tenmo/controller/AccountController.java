@@ -35,14 +35,17 @@ public class AccountController {
     }
 
     @RequestMapping(path = "/transfers/", method = RequestMethod.POST)
-    public TransferDTO sendTransfer(@RequestBody TransferDTO transfer, Principal currentUser) {
-        Long account_id = accountDao.findAccountByUsername(currentUser.getName()).getAccount_id();
-        Long recipientUserID = accountDao.findUserID(transfer.getRecipient_user_id());
-        Transfer newTransfer = new Transfer(2L, 1L, account_id, recipientUserID, transfer.getAmount());
-        accountDao.sendFunds(transfer.getAmount(), account_id);
-        accountDao.receiveFunds(transfer.getAmount(), recipientUserID);
+    public Transfer sendTransfer(@RequestBody TransferDTO transfer, Principal currentUser) {
+        Long currentUserAccountId = accountDao.findAccountByUsername(currentUser.getName()).getAccount_id();
+        Long currentUserID = accountDao.findUserID(currentUserAccountId);
+        String recipientUsername = transfer.getRecipient_username();
+        Long recipientAccountId = accountDao.findAccountIDByUsername(recipientUsername);
+        Long recipientUserid = transfer.getRecipient_user_id();
+        Transfer newTransfer = new Transfer(2L, 1L, currentUserAccountId, recipientAccountId, transfer.getAmount());
+        accountDao.sendFunds(transfer.getAmount(),currentUserID);
+        accountDao.receiveFunds(transfer.getAmount(), recipientUserid);
         transferDao.createTransfer(newTransfer);
-        return transfer;
+        return newTransfer;
     }
 
 

@@ -12,9 +12,11 @@ public interface AccountDao {
 
     Account receiveFunds(BigDecimal amount, Long accountId);
 
-    Account sendFunds(BigDecimal amount, Long accountId);
+    BigDecimal sendFunds(BigDecimal amount, Long accountId);
 
     Long findUserID(Long account_id);
+
+    Long findAccountIDByUsername(String username);
 
 
 }
