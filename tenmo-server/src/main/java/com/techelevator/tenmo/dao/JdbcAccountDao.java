@@ -48,6 +48,7 @@ public class JdbcAccountDao implements AccountDao {
         // throw new UsernameNotFoundException("User " + username + " was not found.");
     }
 
+
     @Override
     public BigDecimal getAccountBalanceByUsername(String username) {
         BigDecimal balance = null;

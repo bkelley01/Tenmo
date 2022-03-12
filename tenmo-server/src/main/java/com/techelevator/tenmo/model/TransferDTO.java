@@ -17,6 +17,24 @@ public class TransferDTO {
     private Long current_user_id;
     @NotBlank
     private Long recipient_user_id;
+    @NotBlank
+    private String recipient_username;
+
+    public Long getCurrent_user_id() {
+        return current_user_id;
+    }
+
+    public void setCurrent_user_id(Long current_user_id) {
+        this.current_user_id = current_user_id;
+    }
+
+    public String getRecipient_username() {
+        return recipient_username;
+    }
+
+    public void setRecipient_username(String recipient_username) {
+        this.recipient_username = recipient_username;
+    }
 
     private BigDecimal amount;
 

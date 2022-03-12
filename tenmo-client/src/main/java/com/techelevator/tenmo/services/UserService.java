@@ -5,6 +5,7 @@ import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.TransferDTO;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.util.BasicLogger;
+import org.openqa.selenium.remote.Response;
 import org.springframework.http.*;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
@@ -40,6 +41,21 @@ public class UserService {
         }
         return allUsers;
     }
+
+    public String getUsernameById(Long id) {
+        String username = null;
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(API_BASE_URL + "/users/" + id,
+                    HttpMethod.GET, makeAuthEntity(), String.class);
+            username = response.getBody();
+            System.out.println(username);
+        } catch (RestClientResponseException | ResourceAccessException e) {
+            BasicLogger.log(e.getMessage());
+        }
+        return username;
+    }
+
+
 
     private HttpEntity<Void> makeAuthEntity() {
         HttpHeaders headers = new HttpHeaders();
