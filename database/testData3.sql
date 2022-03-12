@@ -8,9 +8,14 @@ JOIN account ON account.account_id = transfer.account_from
 JOIN tenmo_user ON tenmo_user.user_id = account.user_id
 WHERE username = 'abdou'
 
-select *
-from transfer;
+select user_id
+FROM account
+WHERE account_id = 2002;
 
+
+
+select *
+from tr
 
 select *
 from tenmo_user;

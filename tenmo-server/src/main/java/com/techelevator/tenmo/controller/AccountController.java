@@ -2,9 +2,11 @@ package com.techelevator.tenmo.controller;
 
 import com.techelevator.tenmo.dao.JdbcAccountDao;
 import com.techelevator.tenmo.dao.JdbcTransferDao;
+import com.techelevator.tenmo.dao.JdbcUserDao;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.TransferDTO;
+import com.techelevator.tenmo.model.User;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,10 +20,12 @@ public class AccountController {
 
     private JdbcAccountDao accountDao;
     private JdbcTransferDao transferDao;
+    private JdbcUserDao userDao;
 
-    public AccountController(JdbcAccountDao accountDao, JdbcTransferDao transferDao) {
+    public AccountController(JdbcAccountDao accountDao, JdbcTransferDao transferDao, JdbcUserDao userDao) {
         this.accountDao = accountDao;
         this.transferDao = transferDao;
+        this.userDao = userDao;
     }
 
 
@@ -50,5 +54,10 @@ public class AccountController {
     @RequestMapping(path = "/transfers/{id}", method = RequestMethod.GET)
     public Transfer getTransfer(@PathVariable Long id) {
         return this.transferDao.getTransfer(id);
+    }
+
+    @RequestMapping(path = "/users/", method = RequestMethod.GET)
+    public List<User> getAllUsers() {
+        return userDao.findAll();
     }
 }

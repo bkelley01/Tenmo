@@ -1,12 +1,8 @@
 package com.techelevator.tenmo;
 
-import com.techelevator.tenmo.model.Account;
-import com.techelevator.tenmo.model.AuthenticatedUser;
-import com.techelevator.tenmo.model.UserCredentials;
-import com.techelevator.tenmo.services.AccountService;
-import com.techelevator.tenmo.services.AuthenticationService;
-import com.techelevator.tenmo.services.ConsoleService;
-import com.techelevator.tenmo.services.TransferService;
+import com.techelevator.tenmo.model.*;
+import com.techelevator.tenmo.services.*;
+import com.techelevator.util.BasicLogger;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
@@ -17,7 +13,6 @@ public class App {
 
     private final ConsoleService consoleService = new ConsoleService();
     private final AuthenticationService authenticationService = new AuthenticationService(API_BASE_URL);
-
     private AuthenticatedUser currentUser;
 
     public static void main(String[] args) {
@@ -125,7 +120,21 @@ public class App {
     }
 
     private void sendBucks() {
-        // TODO Auto-generated method stub
+        TransferService transferService = new TransferService(API_BASE_URL, currentUser);
+        UserService userService = new UserService(API_BASE_URL, currentUser);
+
+        TransferDTO transferDTO = new TransferDTO();
+
+        userService.getAllUsers();
+        int userID = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel): ");
+        BigDecimal amount = consoleService.promptForBigDecimal("Enter amount: ");
+        transferDTO.setAmount(amount);
+        transferDTO.setRecipient_user_id((long) userID);
+        try {
+            transferService.addTransfer(transferDTO);
+        } catch (NumberFormatException e) {
+            BasicLogger.log(e.getMessage());
+        }
 
     }
 
