@@ -124,13 +124,12 @@ public class App {
         UserService userService = new UserService(API_BASE_URL, currentUser);
 
         Transfer transfer = new Transfer();
-        TransferDTO transferDTO = new TransferDTO();
 
         userService.getAllUsers();
         int userID = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel): ");
         BigDecimal amount = consoleService.promptForBigDecimal("Enter amount: ");
         transfer.setAmount(amount);
-        transferDTO.setRecipient_user_id((long) userID);
+        transfer.setAccount_to((long) userID);
         try {
             transferService.addTransfer(transfer);
             System.out.println("Your transfer is complete.");

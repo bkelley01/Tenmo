@@ -5,8 +5,20 @@ RETURNING transfer_id;
 select *
 FROM transfer
 JOIN account ON account.account_id = transfer.account_from
-JOIN tenmo_user ON tenmo_user.user_id = account.user_id
+
 WHERE username = 'abdou'
+
+SELECT *
+FROM account
+JOIN tenmo_user ON tenmo_user.user_id = account.user_id;
+
+UPDATE account
+SET balance = 1000
+WHERE user_id = 1002;
+
+SELECT *
+FROM transfer;
+
 
 select user_id
 FROM account

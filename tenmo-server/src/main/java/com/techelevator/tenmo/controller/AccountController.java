@@ -1,9 +1,6 @@
 package com.techelevator.tenmo.controller;
 
-import com.techelevator.tenmo.dao.JdbcAccountDao;
-import com.techelevator.tenmo.dao.JdbcTransferDao;
-import com.techelevator.tenmo.dao.JdbcUserDao;
-import com.techelevator.tenmo.model.Account;
+import com.techelevator.tenmo.dao.*;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.TransferDTO;
 import com.techelevator.tenmo.model.User;
@@ -18,11 +15,11 @@ import java.util.List;
 @PreAuthorize("isAuthenticated()")
 public class AccountController {
 
-    private JdbcAccountDao accountDao;
-    private JdbcTransferDao transferDao;
-    private JdbcUserDao userDao;
+    private AccountDao accountDao;
+    private TransferDao transferDao;
+    private UserDao userDao;
 
-    public AccountController(JdbcAccountDao accountDao, JdbcTransferDao transferDao, JdbcUserDao userDao) {
+    public AccountController(AccountDao accountDao, TransferDao transferDao, UserDao userDao) {
         this.accountDao = accountDao;
         this.transferDao = transferDao;
         this.userDao = userDao;
@@ -35,13 +32,14 @@ public class AccountController {
     }
 
     @RequestMapping(path = "/transfers/", method = RequestMethod.POST)
-    public void sendTransfer(@RequestBody TransferDTO transferDTO, Principal currentUser) {
+    public Transfer sendTransfer(@RequestBody TransferDTO transferDTO, Principal currentUser) {
         Long currentUserAccountId = accountDao.findAccountByUsername(currentUser.getName()).getAccount_id();
-        Transfer thisTransfer = new Transfer(2L, 2L, currentUserAccountId, accountDao.getAccountIdByUserId(transferDTO.getRecipient_user_id()),
+        Long recipientUserId = transferDTO.getRecipientUserId();
+        Transfer thisTransfer = new Transfer(2L, 2L, currentUserAccountId, accountDao.getAccountIdByUserId(recipientUserId),
                 transferDTO.getAmount());
         accountDao.sendFunds(transferDTO.getAmount(), currentUserAccountId);
         accountDao.receiveFunds(transferDTO.getAmount(), thisTransfer.getAccount_to());
-        transferDao.createTransfer(thisTransfer);
+        return transferDao.createTransfer(thisTransfer);
     }
 
     @RequestMapping(path = "/transfers/user/{id}", method = RequestMethod.GET)

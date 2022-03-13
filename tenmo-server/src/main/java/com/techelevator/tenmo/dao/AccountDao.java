@@ -18,5 +18,7 @@ public interface AccountDao {
 
     Long findAccountIDByUsername(String username);
 
+    Long getAccountIdByUserId (Long userId);
+
 
 }

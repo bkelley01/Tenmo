@@ -1,21 +1,20 @@
 package com.techelevator.tenmo.model;
 
-import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
 public class TransferDTO {
 
-    private Long recipient_user_id;
+    private Long recipientUserId;
 
     private BigDecimal amount;
 
 
-    public Long getRecipient_user_id() {
-        return recipient_user_id;
+    public Long getRecipientUserId() {
+        return recipientUserId;
     }
 
-    public void setRecipient_user_id(Long recipient_user_id) {
-        this.recipient_user_id = recipient_user_id;
+    public void setRecipientUserId(Long recipientUserId) {
+        this.recipientUserId = recipientUserId;
     }
 
     public BigDecimal getAmount() {

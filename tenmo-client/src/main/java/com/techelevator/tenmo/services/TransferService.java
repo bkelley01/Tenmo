@@ -108,7 +108,8 @@ public class TransferService {
                     "Status: " + transfer.getTransfer_status_id() + "\n" +
                     "Amount: $" + transfer.getAmount());
         } catch (RestClientResponseException | ResourceAccessException e) {
-            System.out.println(e.getMessage());
+            BasicLogger.log(e.getMessage());
+
         }
         return transfer;
     }
