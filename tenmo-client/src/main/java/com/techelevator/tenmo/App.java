@@ -14,6 +14,7 @@ public class App {
     private final ConsoleService consoleService = new ConsoleService();
     private final AuthenticationService authenticationService = new AuthenticationService(API_BASE_URL);
     private AuthenticatedUser currentUser;
+   // private final AccountService accountService = new AccountService(API_BASE_URL, currentUser);
 
     public static void main(String[] args) {
         App app = new App();
@@ -107,6 +108,7 @@ public class App {
         try {
             transferService.getAllTransfersById();
             Long id = (long) consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): ");
+           // transferService.getTransferById(id);
             transferService.getTransferById(id);
         } catch (NumberFormatException e) {
             System.out.println("Invalid Input");
@@ -122,6 +124,7 @@ public class App {
     private void sendBucks() {
         TransferService transferService = new TransferService(API_BASE_URL, currentUser);
         UserService userService = new UserService(API_BASE_URL, currentUser);
+        AccountService accountService = new AccountService(API_BASE_URL, currentUser);
 
         Transfer transfer = new Transfer();
 
@@ -131,9 +134,12 @@ public class App {
         transfer.setAmount(amount);
         transfer.setAccount_to((long) userID);
         try {
-            transferService.addTransfer(transfer);
-            System.out.println("Your transfer is complete.");
+            if (amount != null && amount.compareTo(accountService.getBalance()) < 0) {
+                transferService.addTransfer(transfer);
+                System.out.println("Your transfer is complete.");
+            }
         } catch (NumberFormatException e) {
+            System.out.println("Invalid Selection, please try again.");
             BasicLogger.log(e.getMessage());
         }
 

@@ -29,13 +29,9 @@ public class TransferService {
 
     public Transfer[] getAllTransfersById() {
         Transfer[] allTransfers = null;
-
-        Account account = new Account();
-
         try {
             ResponseEntity<Transfer[]> response = restTemplate.exchange(API_BASE_URL + "/transfers/user/" + currentUser.getUser().getId(),
                     HttpMethod.GET, makeAuthEntity(), Transfer[].class);
-
             allTransfers = response.getBody();
 
             System.out.println("-------------------------------------------\n" +
@@ -44,14 +40,11 @@ public class TransferService {
                     "-------------------------------------------\n");
             if (allTransfers != null) {
 
-
                 for (Transfer transfer : allTransfers) {
-
                     System.out.println(transfer.getTransfer_id() + "        " + transfer.getAccount_from() + "/" + transfer.getAccount_to() + "               $" + transfer.getAmount());
                     System.out.println();
                 }
             }
-
         } catch (RestClientResponseException | ResourceAccessException e) {
             System.out.println(e.getMessage());
         }
@@ -59,8 +52,9 @@ public class TransferService {
     }
 
     //****************************************Commented out what worked and tried to update method
-//    public Transfer getTransferById(Long id) {
+//    public Transfer getTransfer(Long id) {
 //        Transfer transfer = null;
+//
 //
 //        try {
 //            ResponseEntity<Transfer> response = restTemplate.exchange((API_BASE_URL + "/transfers/" + id),
@@ -81,18 +75,17 @@ public class TransferService {
 //        return transfer;
 //    }
 
-    public Transfer getTransferById(Long id, Transfer transferChoice) {
+    public Transfer getTransferById(Long id) {
         Transfer transfer = null;
-
-        Long ids = transferChoice.getTransfer_id();
-        BigDecimal amount = transferChoice.getAmount();
-        Long fromAccount = transferChoice.getAccount_from();
-        Long toAccount = transferChoice.getAccount_to();
-
-        Long fromUserId = accountService.getAccountByUserId(currentUser, fromAccount).getUser_id();
-        String fromUserName = userService.getUsernameById(fromUserId);
-        Long toUserId = accountService.getAccountByUserId(currentUser, toAccount).getUser_id();
-        String toUserName = userService.getUsernameById(toUserId);
+//        Long ids = transferChoice.getTransfer_id();
+//        BigDecimal amount = transferChoice.getAmount();
+//        Long fromAccount = transferChoice.getAccount_from();
+//        Long toAccount = transferChoice.getAccount_to();
+//
+//        Long fromUserId = accountService.getAccountByUserId(currentUser, fromAccount).getUser_id();
+//        String fromUserName = userService.getUsernameById(fromUserId);
+//        Long toUserId = accountService.getAccountByUserId(currentUser, toAccount).getUser_id();
+//        String toUserName = userService.getUsernameById(toUserId);
 
         try {
             ResponseEntity<Transfer> response = restTemplate.exchange((API_BASE_URL + "/transfers/" + id),
@@ -102,8 +95,8 @@ public class TransferService {
                     "Transfer Details\n" +
                     "--------------------------------------------\n" +
                     "Id: " + transfer.getTransfer_id() + "\n" +
-                    "From: " + fromUserName + "\n" +
-                    "To: " + toUserName + "\n" +
+                    "From: " + userService.getUsernameByAcctId(transfer.getAccount_from()) + "\n" +
+                    "To: " + userService.getUsernameByAcctId(transfer.getAccount_to()) + "\n" +
                     "Type: " + transfer.getTransfer_type_id() + "\n" +
                     "Status: " + transfer.getTransfer_status_id() + "\n" +
                     "Amount: $" + transfer.getAmount());
@@ -115,13 +108,12 @@ public class TransferService {
     }
 
     public Transfer addTransfer(Transfer newTransfer) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Transfer> entity = new HttpEntity<>(newTransfer, headers);
         Transfer createdTransfer = null;
         try {
-            ResponseEntity<Transfer> response = this.restTemplate.exchange(
-                    API_BASE_URL + "/transfers/",
-                    HttpMethod.POST, this.makeTransferEntity(newTransfer),
-                    Transfer.class);
-            createdTransfer = response.getBody();
+            createdTransfer = restTemplate.postForObject(API_BASE_URL + "/transfers/", entity, Transfer.class);
 
         } catch (ResourceAccessException | RestClientResponseException e) {
             BasicLogger.log(e.getMessage());
@@ -144,6 +136,4 @@ public class TransferService {
         return new HttpEntity<>(headers);
     }
 
-    public void getTransferById(Long id) {
-    }
 }
