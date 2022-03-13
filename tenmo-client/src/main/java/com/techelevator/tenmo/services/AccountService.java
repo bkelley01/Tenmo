@@ -3,6 +3,7 @@ package com.techelevator.tenmo.services;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.AuthenticatedUser;
 import com.techelevator.util.BasicLogger;
+import org.apiguardian.api.API;
 import org.springframework.http.*;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
@@ -33,6 +34,23 @@ public class AccountService {
             BasicLogger.log(e.getMessage());
         }
         return balance;
+    }
+
+    public Account getAccountByUserId(AuthenticatedUser authenticatedUser, Long userId) {
+
+        Account account = null;
+        try {
+            account = restTemplate.exchange(API_BASE_URL + "account/user/" + userId,
+                    HttpMethod.GET,
+                    makeAuthEntity(),
+                    Account.class).getBody();
+        } catch(RestClientResponseException e) {
+            System.out.println("Could not complete request. Code: " + e.getRawStatusCode());
+        } catch(ResourceAccessException e) {
+            System.out.println("Could not complete request due to server network issue. Please try again.");
+        }
+
+        return account;
     }
 
 

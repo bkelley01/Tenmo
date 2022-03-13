@@ -106,7 +106,7 @@ public class App {
 
         try {
             transferService.getAllTransfersById();
-            Long id = Long.valueOf(consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): "));
+            Long id = (long) consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): ");
             transferService.getTransferById(id);
         } catch (NumberFormatException e) {
             System.out.println("Invalid Input");
