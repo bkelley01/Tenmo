@@ -17,4 +17,6 @@ public interface UserDao {
     String findUsernameById(Long user_id);
 
     String findUsernameByAcctId(Long accountId);
+
+    Long findAccountByUserId(Long userId);
 }

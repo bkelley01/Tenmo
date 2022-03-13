@@ -132,12 +132,12 @@ public class App {
         int userID = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel): ");
         BigDecimal amount = consoleService.promptForBigDecimal("Enter amount: ");
         transfer.setAmount(amount);
-        transfer.setAccount_to((long) userID);
+        Long recAcct = userService.getAccountByUserId((long) userID);
+        System.out.println(recAcct);
+        transfer.setAccount_to(recAcct);
         try {
-            if (amount != null && amount.compareTo(accountService.getBalance()) < 0) {
                 transferService.addTransfer(transfer);
                 System.out.println("Your transfer is complete.");
-            }
         } catch (NumberFormatException e) {
             System.out.println("Invalid Selection, please try again.");
             BasicLogger.log(e.getMessage());

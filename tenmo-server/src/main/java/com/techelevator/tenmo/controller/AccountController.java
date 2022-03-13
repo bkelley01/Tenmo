@@ -66,4 +66,9 @@ public class AccountController {
     public String getUsernameByAcctId(@PathVariable Long accountId) {
         return this.userDao.findUsernameByAcctId(accountId);
     }
+
+    @RequestMapping(path = "/users/account/{id}", method = RequestMethod.GET)
+    public Long getAccountByUserId(@PathVariable Long id) {
+        return this.userDao.findAccountByUserId(id);
+    }
 }

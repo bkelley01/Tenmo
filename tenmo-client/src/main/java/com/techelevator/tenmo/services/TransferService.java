@@ -14,17 +14,13 @@ public class TransferService {
     AuthenticatedUser currentUser = new AuthenticatedUser();
     private String API_BASE_URL;
     private final RestTemplate restTemplate = new RestTemplate();
-    //private AuthenticatedUser currentUser;
-    private ConsoleService console;
-    private AuthenticationService authenticationService;
-    private AccountService accountService;
     private UserService userService;
-    private TransferService transferService;
+
 
     public TransferService(String API_BASE_URL, AuthenticatedUser currentUser) {
         this.API_BASE_URL = API_BASE_URL;
         this.currentUser = currentUser;
-
+        userService = new UserService(API_BASE_URL, currentUser);
     }
 
     public Transfer[] getAllTransfersById() {
@@ -41,7 +37,7 @@ public class TransferService {
             if (allTransfers != null) {
 
                 for (Transfer transfer : allTransfers) {
-                    System.out.println(transfer.getTransfer_id() + "        " + transfer.getAccount_from() + "/" + transfer.getAccount_to() + "               $" + transfer.getAmount());
+                    System.out.println(transfer.getTransfer_id() + "        " + userService.getUsernameByAcctId(transfer.getAccount_to()) + "               $" + transfer.getAmount());
                     System.out.println();
                 }
             }
@@ -51,41 +47,8 @@ public class TransferService {
         return allTransfers;
     }
 
-    //****************************************Commented out what worked and tried to update method
-//    public Transfer getTransfer(Long id) {
-//        Transfer transfer = null;
-//
-//
-//        try {
-//            ResponseEntity<Transfer> response = restTemplate.exchange((API_BASE_URL + "/transfers/" + id),
-//                    HttpMethod.GET, makeAuthEntity(), Transfer.class);
-//            transfer = response.getBody();
-//            System.out.println("--------------------------------------------\n" +
-//                    "Transfer Details\n" +
-//                    "--------------------------------------------\n" +
-//                    "Id: " + transfer.getTransfer_id() + "\n" +
-//                    "From: " + transfer.getAccount_from() + "\n" +
-//                    "To: " + transfer.getAccount_to() + "\n" +
-//                    "Type: " + transfer.getTransfer_type_id() + "\n" +
-//                    "Status: " + transfer.getTransfer_status_id() + "\n" +
-//                    "Amount: $" + transfer.getAmount());
-//        } catch (RestClientResponseException | ResourceAccessException e) {
-//            System.out.println(e.getMessage());
-//        }
-//        return transfer;
-//    }
-
     public Transfer getTransferById(Long id) {
         Transfer transfer = null;
-//        Long ids = transferChoice.getTransfer_id();
-//        BigDecimal amount = transferChoice.getAmount();
-//        Long fromAccount = transferChoice.getAccount_from();
-//        Long toAccount = transferChoice.getAccount_to();
-//
-//        Long fromUserId = accountService.getAccountByUserId(currentUser, fromAccount).getUser_id();
-//        String fromUserName = userService.getUsernameById(fromUserId);
-//        Long toUserId = accountService.getAccountByUserId(currentUser, toAccount).getUser_id();
-//        String toUserName = userService.getUsernameById(toUserId);
 
         try {
             ResponseEntity<Transfer> response = restTemplate.exchange((API_BASE_URL + "/transfers/" + id),
@@ -108,6 +71,7 @@ public class TransferService {
     }
 
     public Transfer addTransfer(Transfer newTransfer) {
+        System.out.println("hello world");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Transfer> entity = new HttpEntity<>(newTransfer, headers);
@@ -117,8 +81,10 @@ public class TransferService {
 
         } catch (ResourceAccessException | RestClientResponseException e) {
             BasicLogger.log(e.getMessage());
+        } catch (Exception e1) {
+            BasicLogger.log(e1.getMessage());
         }
-
+        System.out.println(createdTransfer);
         return createdTransfer;
     }
 

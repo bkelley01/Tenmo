@@ -68,6 +68,19 @@ public class UserService {
         return username;
     }
 
+    public Long getAccountByUserId(Long userId) {
+        Long accountId = null;
+        try {
+            ResponseEntity<Long> response = restTemplate.exchange(API_BASE_URL + "/users/account/" + userId,
+                    HttpMethod.GET, makeAuthEntity(), Long.class);
+            accountId = response.getBody();
+            System.out.println(accountId);
+        } catch (RestClientResponseException | ResourceAccessException e) {
+            BasicLogger.log(e.getMessage());
+        }
+        return accountId;
+    }
+
 
 
     private HttpEntity<Void> makeAuthEntity() {
