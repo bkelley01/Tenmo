@@ -48,7 +48,6 @@ public class UserService {
             ResponseEntity<String> response = restTemplate.exchange(API_BASE_URL + "/users/" + id,
                     HttpMethod.GET, makeAuthEntity(), String.class);
             username = response.getBody();
-            System.out.println(username);
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
         }
@@ -61,7 +60,6 @@ public class UserService {
             ResponseEntity<String> response = restTemplate.exchange(API_BASE_URL + "/users/username/" + accountId,
                     HttpMethod.GET, makeAuthEntity(), String.class);
             username = response.getBody();
-            System.out.println(username);
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
         }
@@ -74,7 +72,6 @@ public class UserService {
             ResponseEntity<Long> response = restTemplate.exchange(API_BASE_URL + "/users/account/" + userId,
                     HttpMethod.GET, makeAuthEntity(), Long.class);
             accountId = response.getBody();
-            System.out.println(accountId);
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
         }

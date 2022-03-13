@@ -11,11 +11,10 @@ import java.math.BigDecimal;
 
 public class TransferService {
 
-    AuthenticatedUser currentUser = new AuthenticatedUser();
+    AuthenticatedUser currentUser;
     private String API_BASE_URL;
     private final RestTemplate restTemplate = new RestTemplate();
     private UserService userService;
-
 
     public TransferService(String API_BASE_URL, AuthenticatedUser currentUser) {
         this.API_BASE_URL = API_BASE_URL;
@@ -37,7 +36,7 @@ public class TransferService {
             if (allTransfers != null) {
 
                 for (Transfer transfer : allTransfers) {
-                    System.out.println(transfer.getTransfer_id() + "        " + userService.getUsernameByAcctId(transfer.getAccount_to()) + "               $" + transfer.getAmount());
+                    System.out.println(transfer.getTransfer_id() + "        " + userService.getUsernameByAcctId(transfer.getAccount_from()) + "/" + userService.getUsernameByAcctId(transfer.getAccount_to()) + "               $" + transfer.getAmount());
                     System.out.println();
                 }
             }
@@ -81,8 +80,6 @@ public class TransferService {
 
         } catch (ResourceAccessException | RestClientResponseException e) {
             BasicLogger.log(e.getMessage());
-        } catch (Exception e1) {
-            BasicLogger.log(e1.getMessage());
         }
         System.out.println(createdTransfer);
         return createdTransfer;
