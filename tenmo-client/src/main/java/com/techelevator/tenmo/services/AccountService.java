@@ -29,7 +29,6 @@ public class AccountService {
             ResponseEntity<BigDecimal> response = restTemplate.exchange(API_BASE_URL + "balance/" + currentUser.getUser().getUsername(),
                     HttpMethod.GET, makeAuthEntity(), BigDecimal.class);
             balance = response.getBody();
-            System.out.println( "The current balance is: $" + balance );
         } catch (RestClientResponseException | ResourceAccessException e) {
             BasicLogger.log(e.getMessage());
         }

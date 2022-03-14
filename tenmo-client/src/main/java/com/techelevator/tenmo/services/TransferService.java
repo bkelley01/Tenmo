@@ -79,7 +79,6 @@ public class TransferService {
             BasicLogger.log(e.getMessage());
             System.out.println(e.getMessage());
         }
-        System.out.println(createdTransfer);
         return createdTransfer;
     }
 
