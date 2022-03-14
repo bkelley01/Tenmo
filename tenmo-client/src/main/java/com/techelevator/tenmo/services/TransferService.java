@@ -71,9 +71,7 @@ public class TransferService {
 
     public Transfer addTransfer(Transfer newTransfer) {
         System.out.println("hello world");
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Transfer> entity = new HttpEntity<>(newTransfer, headers);
+        HttpEntity<Transfer> entity = makeTransferEntity(newTransfer);
         Transfer createdTransfer = null;
         try {
             createdTransfer = restTemplate.postForObject(API_BASE_URL + "/transfers/", entity, Transfer.class);
