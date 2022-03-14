@@ -69,22 +69,22 @@ public class TransferService {
         return transfer;
     }
 
-    public Transfer addTransfer(Transfer newTransfer) {
-        System.out.println("hello world");
-        HttpEntity<Transfer> entity = makeTransferEntity(newTransfer);
+    public Transfer addTransfer(TransferDTO newTransfer) {
+        HttpEntity<TransferDTO> entity = makeTransferEntity(newTransfer);
         Transfer createdTransfer = null;
         try {
             createdTransfer = restTemplate.postForObject(API_BASE_URL + "/transfers/", entity, Transfer.class);
 
         } catch (ResourceAccessException | RestClientResponseException e) {
             BasicLogger.log(e.getMessage());
+            System.out.println(e.getMessage());
         }
         System.out.println(createdTransfer);
         return createdTransfer;
     }
 
 
-    private HttpEntity<Transfer> makeTransferEntity(Transfer transfer) {
+    private HttpEntity<TransferDTO> makeTransferEntity(TransferDTO transfer) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(currentUser.getToken());

@@ -1,11 +1,12 @@
 package com.techelevator.tenmo.model;
 
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 
 public class TransferDTO {
-
+@Min(value = 1, message = "must provide recipient")
     private Long recipientUserId;
-
+    @Min(value = 1, message = "must provide recipient")
     private BigDecimal amount;
 
 

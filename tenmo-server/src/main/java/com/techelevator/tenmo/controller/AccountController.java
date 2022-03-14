@@ -7,6 +7,7 @@ import com.techelevator.tenmo.model.User;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
@@ -31,8 +32,9 @@ public class AccountController {
         return accountDao.getAccountBalanceByUsername(username);
     }
 
+
     @RequestMapping(path = "/transfers/", method = RequestMethod.POST)
-    public Transfer sendTransfer(@RequestBody TransferDTO transferDTO, Principal currentUser) {
+    public Transfer sendTransfer(@Valid @RequestBody TransferDTO transferDTO, Principal currentUser) {
         Long currentUserAccountId = accountDao.findAccountByUsername(currentUser.getName()).getAccount_id();
         Long recipientUserId = transferDTO.getRecipientUserId();
         Transfer thisTransfer = new Transfer(2L, 2L, currentUserAccountId, accountDao.getAccountIdByUserId(recipientUserId),

@@ -14,6 +14,7 @@ public class Transfer {
     private Long account_from;
 
     private Long account_to;
+
     private BigDecimal amount;
 
 
