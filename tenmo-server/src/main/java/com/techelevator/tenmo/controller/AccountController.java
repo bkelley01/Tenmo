@@ -26,13 +26,13 @@ public class AccountController {
         this.userDao = userDao;
     }
 
-
+//not secure, shouldn't be able to see anyones balance /accounts/username
     @RequestMapping(path = "balance/{username}", method = RequestMethod.GET)
     public BigDecimal balance(@PathVariable String username) {
         return accountDao.getAccountBalanceByUsername(username);
     }
 
-
+//add response status
     @RequestMapping(path = "/transfers/", method = RequestMethod.POST)
     public Transfer sendTransfer(@Valid @RequestBody TransferDTO transferDTO, Principal currentUser) {
         Long currentUserAccountId = accountDao.findAccountByUsername(currentUser.getName()).getAccount_id();
@@ -44,6 +44,7 @@ public class AccountController {
         return transferDao.createTransfer(thisTransfer);
     }
 
+    //add param for auth user    transfers/remit/
     @RequestMapping(path = "/transfers/user/{id}", method = RequestMethod.GET)
     public List<Transfer> getAllTransfersById(@PathVariable Long id) {
         return this.transferDao.getAllTransfersByUserId(id);
@@ -69,6 +70,7 @@ public class AccountController {
         return this.userDao.findUsernameByAcctId(accountId);
     }
 
+    // /users/{id}/account
     @RequestMapping(path = "/users/account/{id}", method = RequestMethod.GET)
     public Long getAccountByUserId(@PathVariable Long id) {
         return this.userDao.findAccountByUserId(id);
