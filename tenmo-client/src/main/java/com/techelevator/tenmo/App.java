@@ -14,7 +14,6 @@ public class App {
     private final ConsoleService consoleService = new ConsoleService();
     private final AuthenticationService authenticationService = new AuthenticationService(API_BASE_URL);
     private AuthenticatedUser currentUser;
-   // private final AccountService accountService = new AccountService(API_BASE_URL, currentUser);
 
     public static void main(String[] args) {
         App app = new App();
@@ -91,10 +90,8 @@ public class App {
 
         AccountService accountService = new AccountService(API_BASE_URL, currentUser);
 
-
         try {
-            accountService.getBalance();
-
+            System.out.println("The current balance is: $" + accountService.getBalance());
         } catch (NullPointerException e) {
             System.out.println(e.getMessage());
         }
@@ -108,7 +105,6 @@ public class App {
         try {
             transferService.getAllTransfersById();
             Long id = (long) consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): ");
-           // transferService.getTransferById(id);
             transferService.getTransferById(id);
         } catch (NumberFormatException e) {
             System.out.println("Invalid Input");
@@ -124,7 +120,7 @@ public class App {
     private void sendBucks() {
         TransferService transferService = new TransferService(API_BASE_URL, currentUser);
         UserService userService = new UserService(API_BASE_URL, currentUser);
-        AccountService accountService = new AccountService(API_BASE_URL, currentUser);
+//        AccountService accountService = new AccountService(API_BASE_URL, currentUser);
 
         TransferDTO transfer = new TransferDTO();
 
@@ -132,12 +128,17 @@ public class App {
         int userID = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel): ");
         BigDecimal amount = consoleService.promptForBigDecimal("Enter amount: ");
         transfer.setAmount(amount);
-//        Long recAcct = userService.getAccountByUserId((long) userID);
-//        System.out.println(recAcct);
         transfer.setRecipientUserId((long) userID);
+
         try {
+//            if (amount.compareTo(accountService.getBalance()) <= 0) {
+//                transferService.addTransfer(transfer);
+//            } else System.out.println("You cannot transfer more TEBucks than you have! Try again.");
+            if (currentUser.getUser().getId() != userID) {
                 transferService.addTransfer(transfer);
                 System.out.println("Your transfer is complete.");
+            } else System.out.println("You cannot transfer TEBucks to yourself! Try again.");
+
         } catch (NumberFormatException e) {
             System.out.println("Invalid Selection, please try again.");
             BasicLogger.log(e.getMessage());
