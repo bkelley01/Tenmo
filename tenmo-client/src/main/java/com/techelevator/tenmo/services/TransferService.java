@@ -29,6 +29,7 @@ public class TransferService {
                     HttpMethod.GET, makeAuthEntity(), Transfer[].class);
             allTransfers = response.getBody();
 
+            //move to app
             System.out.println("-------------------------------------------\n" +
                     "Transfers\n" +
                     "ID          From/To                 Amount\n" +
@@ -53,6 +54,8 @@ public class TransferService {
             ResponseEntity<Transfer> response = restTemplate.exchange((API_BASE_URL + "/transfers/" + id),
                     HttpMethod.GET, makeAuthEntity(), Transfer.class);
             transfer = response.getBody();
+
+            //move to app
             System.out.println("--------------------------------------------\n" +
                     "Transfer Details\n" +
                     "--------------------------------------------\n" +
